@@ -25,12 +25,24 @@ async function run() {
     // Connect the client to the server	(optional starting in v4.7)
     // await client.connect();
 
+    // database information
+    const database = client.db("thePipes");
+    const pipeServices = database.collection("pipeServices");
 
+    // get/find:: get services to API endpoint
+    app.get('/services', async(req, res)=> {
+        const cursor = pipeServices.find().toArray()
+        const result = await cursor;
+        res.send(result)
+    })
 
-
-
-
-
+    // post:: insert document to mongoDB
+    app.post('/services', async(req, res)=> {
+        const receivedData = req.body;
+         // Insert the defined document into the "pipeServices" collection
+         const result = await pipeServices.insertOne(receivedData);
+         res.send(result);
+    })
 
 
 
