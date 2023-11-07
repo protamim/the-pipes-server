@@ -1,5 +1,5 @@
 const express = require('express')
-const { MongoClient, ServerApiVersion } = require('mongodb');
+const { MongoClient, ServerApiVersion, ObjectId } = require('mongodb');
 var cors = require('cors')
 const app = express()
 const port = process.env.PORT || 3000;
@@ -29,11 +29,19 @@ async function run() {
     const database = client.db("thePipes");
     const pipeServices = database.collection("pipeServices");
 
-    // get/find:: get services to API endpoint
+    // get/find:: All services API
     app.get('/services', async(req, res)=> {
         const cursor = pipeServices.find().toArray()
         const result = await cursor;
         res.send(result)
+    })
+
+    // get/find:: get a specific product by ID
+    app.get('/services/:id', async(req, res)=> {
+      const id = req.params.id;
+      const query = {_id: new ObjectId(id)}
+      const result = await pipeServices.findOne(query);
+      res.send(result);
     })
 
     // post:: insert document to mongoDB
