@@ -28,6 +28,7 @@ async function run() {
     // database information
     const database = client.db("thePipes");
     const pipeServices = database.collection("pipeServices");
+    const booking = database.collection("booking");
 
     // get/find:: All services API
     app.get('/services', async(req, res)=> {
@@ -38,8 +39,8 @@ async function run() {
 
     // get/find:: get a specific product by ID
     app.get('/services/:id', async(req, res)=> {
-      const id = req.params.id;
-      const query = {_id: new ObjectId(id)}
+      const id = req.params.id.toString();
+      const query = {"_id": new ObjectId(id)}
       const result = await pipeServices.findOne(query);
       res.send(result);
     })
@@ -50,6 +51,13 @@ async function run() {
          // Insert the defined document into the "pipeServices" collection
          const result = await pipeServices.insertOne(receivedData);
          res.send(result);
+    })
+
+    // Post:: insert services by users to the database
+    app.post('/booking', async(req, res)=> {
+      const info = req.body;
+      const result = await booking.insertOne(info);
+      res.send(result);
     })
 
 
