@@ -60,6 +60,20 @@ async function run() {
       res.send(result);
     })
 
+    // PUT:: update operation
+    app.put('/services/:id', async(req, res)=> {
+      const body = req.body;
+      const id = req.params.id;
+      const filter = {_id: new ObjectId(id)};
+      const options = { upsert: true };
+      const updateDoc = {
+        $set: {
+          ...body,
+        }
+      };
+      const result = await pipeServices.updateOne(filter, updateDoc, options);
+      res.send(result);
+    })
 
 
     // Send a ping to confirm a successful connection
