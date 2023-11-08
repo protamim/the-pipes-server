@@ -37,6 +37,13 @@ async function run() {
         res.send(result)
     })
 
+    // get/find:: Booking API
+    app.get('/booking', async(req, res)=> {
+        const cursor = booking.find().toArray()
+        const result = await cursor;
+        res.send(result)
+    })
+
     // get/find:: get a specific product by ID
     app.get('/services/:id', async(req, res)=> {
       const id = req.params.id.toString();
@@ -72,6 +79,13 @@ async function run() {
         }
       };
       const result = await pipeServices.updateOne(filter, updateDoc, options);
+      res.send(result);
+    })
+
+    // delete:: delete your service
+    app.delete('/services/:id', async(req, res)=> {
+      const query = {_id: new ObjectId(req.params.id)};
+      const result = await pipeServices.deleteOne(query);
       res.send(result);
     })
 
